@@ -7,11 +7,10 @@ A Basic TTD Application to help manage customer ticketing
 1, Clone the project to your local host, <br />
 2, Run the command npm install  <br />
 3, Run the command <br />
-    -for prodution - npm run start <br />
-    -for development - npm run dev <br />
-    -for test -npm run test <br />
-4, install the postman collection to access all avaliable endpoints https://documenter.getpostman.com/view/10060503/TzeRpVv9 <br />
-
+     - npm run start <br />
+     -npm run test:i
+4, open 'Tiketing system.postman_collection <br />
+//this application runs on port 1337
  <br />
 
 **Ticket**

@@ -1,0 +1,950 @@
+{
+	"info": {
+		"_postman_id": "6d43e871-4b03-4c4b-b1a9-84a14a222166",
+		"name": "Ticketing Sytem",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\" : \"Godwin Daniel\",\r\n    \"email\" : \"custoer@d.com\",\r\n    \"password\" : \"password\",\r\n    \"passwordConfirmation\" : \"password\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/user/register",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"user",
+								"register"
+							]
+						},
+						"description": "Customer Registration End point "
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.environment.set(\"refreshToken\", pm.response.json().refreshToken);\r",
+									"pm.environment.set(\"accessToken\", pm.response.json().accessToken);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\" : \"custoer@d.com\",\r\n    \"password\" : \"password\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/user/login",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"user",
+								"login"
+							]
+						},
+						"description": "LOGIN Access point for all users on the application, it return two distint set of keys, the access key and the refresh key, while the access key may expire within a short period of time, the refresh key can be sed to isssue new acess key"
+					},
+					"response": []
+				},
+				{
+					"name": "Forget Password",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.environment.set(\"resetToken\", pm.response.json().resetToken);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\" : \"adminXx@gmail.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/user/forget-password",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"user",
+								"forget-password"
+							]
+						},
+						"description": "End point for password recovery. upon entering a registered valid email address, a reset token is sent to you which expires in 15minutes, within whic, you can input the url as your identigy for reset-password"
+					},
+					"response": []
+				},
+				{
+					"name": "Reset Password",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"password\" : \"12234345\",\r\n    \"passwordConfirmation\":\"12234345\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/user/reset-password/{{resetToken}}",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"user",
+								"reset-password",
+								"{{resetToken}}"
+							]
+						},
+						"description": "Entry Point for resetting user password. using a jwt token elier generated in the forget password tab"
+					},
+					"response": []
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-refresh",
+								"value": "{{refreshToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{URL}}/user/logout",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"user",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Logged In",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-refresh",
+								"value": "{{refreshToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{URL}}/user/logged-in",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"user",
+								"logged-in"
+							]
+						},
+						"description": "Entry point to get details of current logged in user "
+					},
+					"response": []
+				},
+				{
+					"name": "--Create Admin/Agent",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\" : \"Godwin Daniel\",\r\n    \"email\" : \"admixn@adminx.com\",\r\n    \"password\" : \"password\",\r\n    \"passwordConfirmation\" : \"password\",\r\n    \"role\":\"admin\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/user/seed-staff",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"user",
+								"seed-staff"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Admin",
+			"item": [
+				{
+					"name": "Create User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-refresh",
+								"value": "{{refreshToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\" : \"Godwin Daniel\",\r\n    \"email\" : \"admin3@admin.com\",\r\n    \"password\" : \"password001\",\r\n    \"passwordConfirmation\" : \"password001\",\r\n    \"role\" : \"admin\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/admin",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"admin"
+							]
+						},
+						"description": "Entry Point for admin to create new agent customer or user"
+					},
+					"response": []
+				},
+				{
+					"name": "Update User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "x-refresh",
+								"value": "{{refreshToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\" : \"Godwin Daniel\",\r\n    \"email\" : \"admin2@admin.com\",\r\n    \"role\" : \"agent\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/admin/60c4e73556ca121a48b29953",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"admin",
+								"60c4e73556ca121a48b29953"
+							]
+						},
+						"description": "Entry point for admin to Edit details of all user on the platform"
+					},
+					"response": []
+				},
+				{
+					"name": "Get User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-refresh",
+								"value": "{{refreshToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{URL}}/admin/60c4e73556ca121a48b29953",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"admin",
+								"60c4e73556ca121a48b29953"
+							]
+						},
+						"description": "This route enable admin to view details of any particular user"
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Users",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-refresh",
+								"value": "{{refreshToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{URL}}/admin",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"admin"
+							]
+						},
+						"description": "Entry point for admin to view all user currently on the platform\r\n"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete User",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": ""
+						},
+						"description": "Entry point for admin to delete any user on the platform permanently"
+					},
+					"response": []
+				}
+			],
+			"description": "These routes allow admin create/update/delete User"
+		},
+		{
+			"name": "Ticket",
+			"item": [
+				{
+					"name": "Create Ticket (customer only)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-refresh",
+								"value": "{{refreshToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"description\" : \"That being said, SIGTERM (default kill signal) lets the app clean up, while SIGKILL (immediate termination) won't let the app do anything.\",\r\n    \"title\" : \"Another money missing\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/ticket",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"ticket"
+							]
+						},
+						"description": "CUSTOMER ONLY\r\nEntry point for ustomer to create a ticket.. to be reviewed by admin"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Ticket (all user)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-refresh",
+								"value": "{{refreshToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{URL}}/ticket/60c4bea7cda4620f88725462",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"ticket",
+								"60c4bea7cda4620f88725462"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Ticket (admin only)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "x-refresh",
+								"value": "{{refreshToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": " {   \"description\" : \"That being said, SIGTERM (default kill signal) lets the app clean up, while SIGKILL (immediate termination) won't let the app do anything.\",\r\n    \"title\" : \"Another xxx missing\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/ticket/60c4bea7cda4620f88725462",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"ticket",
+								"60c4bea7cda4620f88725462"
+							]
+						},
+						"description": "ADMIN ONLY\r\nEntry Point for tickets to get updated"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Ticket (admin only)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "x-refresh",
+								"value": "{{refreshToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{URL}}/ticket/60c4bea7cda4620f88725462",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"ticket",
+								"60c4bea7cda4620f88725462"
+							]
+						},
+						"description": "ADMIN ONLY\r\nEntry point for ticket to get permanently deleted"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Unit Ticket",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-refresh",
+								"value": "{{refreshToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{URL}}/ticket/60c2c582437ac047541a95fc",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"ticket",
+								"60c2c582437ac047541a95fc"
+							]
+						},
+						"description": "Entry Point to view tickets.\r\nThis allow one view the status of a ticket \r\n\r\nNote : Customers can only view the tickets they created"
+					},
+					"response": []
+				},
+				{
+					"name": "All Comment On  A Ticket",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-refresh",
+								"value": "{{refreshToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{URL}}/ticket/60c2c582437ac047541a95fc/comment",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"ticket",
+								"60c2c582437ac047541a95fc",
+								"comment"
+							]
+						},
+						"description": "Entry Point to view comment on a ticket"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Comment",
+			"item": [
+				{
+					"name": "Create Ticket Comment",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-refresh",
+								"value": "{{refreshToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"comment\": \"types/pdfkit documentation, tutorials, reviews, alternatives, versions, dependencies, community, and ... The repository for high quality TypeScript type definitions.\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/ticket/60c4bea7cda4620f88725462/comment",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"ticket",
+								"60c4bea7cda4620f88725462",
+								"comment"
+							]
+						},
+						"description": "Allow Users comment on a ticket\r\n\r\nNote : A customer can only comment on aticket when it is open.\r\nAn admin and agent can comment when it is open or pending but not when it is closed\r\n"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Comment",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "x-refresh",
+								"value": "{{refreshToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{URL}}/ticket/60c2c582437ac047541a95fc/comment/60c4dcd278b3ec5ee0461c2e",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"ticket",
+								"60c2c582437ac047541a95fc",
+								"comment",
+								"60c4dcd278b3ec5ee0461c2e"
+							]
+						},
+						"description": "ADMIN ONLY\r\n\r\nAllows admin delete a comment"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Report",
+			"item": [
+				{
+					"name": "Print PDF",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-refresh",
+								"value": "{{refreshToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{URL}}/ticket/print-ticket-pdf",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"ticket",
+								"print-ticket-pdf"
+							]
+						},
+						"description": "Allow Admin Get a PDF Report of tickets\r\n\r\nNote: Save the file in .pdf format to view\r\n\r\nNote: by suffixing a valid month between 1-12, the result is th invoice data for that particular month\r\ne.g\r\n\r\nticket/print-ticket-pdf/3 will return results for the month of march\r\n1-January\r\n2-February\r\n.\r\n.\r\n.\r\n.\r\n12-December"
+					},
+					"response": []
+				},
+				{
+					"name": "Print CSV",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-refresh",
+								"value": "{{refreshToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{URL}}/ticket/print-ticket-csv",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"ticket",
+								"print-ticket-csv"
+							]
+						},
+						"description": "Allow Admin Get a CSV Report of tickets\r\n\r\nNote: Save the file in .csv format to view\r\n\r\nNote: by suffixing a valid month between 1-12, the result is th invoice data for that particular month\r\ne.g\r\n\r\nticket/print-ticket-csv/3 will return results for the month of march\r\n1-January\r\n2-February\r\n.\r\n.\r\n.\r\n.\r\n12-December"
+					},
+					"response": []
+				},
+				{
+					"name": "User Ticket",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-refresh",
+								"value": "{{refreshToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{URL}}/ticket/user-ticket",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"ticket",
+								"user-ticket"
+							]
+						},
+						"description": "Gets all ticket for a particluar user\r\n\r\nNOTE\r\n - for customer, this will return tickets created by the customer\r\n\r\n- for admin/agent it will return all ticket handled by the agent/admin\r\n\r\nTickets are considered handled by an agent or admin when they are the very first to comment on a ticket"
+					},
+					"response": []
+				},
+				{
+					"name": "Statistic",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-refresh",
+								"value": "{{refreshToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{URL}}/ticket/group-statistic?start_date=2021-06-10&end_date=2021-06-13",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"ticket",
+								"group-statistic"
+							],
+							"query": [
+								{
+									"key": "start_date",
+									"value": "2021-06-10"
+								},
+								{
+									"key": "end_date",
+									"value": "2021-06-13"
+								}
+							]
+						},
+						"description": "This gives a general overview of the tickets for a particular duration, i.e number of open,closed and pending tickets\r\nit an also be sorted by date following the follow partern\r\n\r\n/group-statistic?start_date=2021-06-10&end_date=2021-06-13"
+					},
+					"response": []
+				},
+				{
+					"name": "Ticket",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-refresh",
+								"value": "{{refreshToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{URL}}/ticket/all-tickets/6",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"ticket",
+								"all-tickets",
+								"6"
+							]
+						},
+						"description": "This return all created for a particular month Ticket for a particular month, but returns yearly if the suffix is empyy"
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

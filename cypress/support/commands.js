@@ -1,8 +1,4 @@
-import config from 'config';
-const host = config.get('host');
-const port = config.get('port');
-
-let baseUrl = `http://${host}:${port}/api/v1/user`;
+let baseUrl = `http://localhost:1337/api/v1/user`;
 
 let registrationUrl = `${baseUrl}/register`;
 

@@ -38,7 +38,7 @@ router.route('/:ticketId').patch(validateRequest(ticketSchema.update), ticketCon
 router.use('/:ticketId/comment', commentRoutes);
 
 //Delete a ticket
-router.route('/:ticketId').delete(hasRole('admin'), ticketController.ticketDelete);
+router.route('/:ticketId').delete(hasRole('admin','agent'), ticketController.ticketDelete);
 
 
 
